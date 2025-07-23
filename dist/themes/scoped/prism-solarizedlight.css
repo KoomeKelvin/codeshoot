@@ -1,0 +1,148 @@
+/*
+ Solarized Color Schemes originally by Ethan Schoonover
+ http://ethanschoonover.com/solarized
+
+ Ported for PrismJS by Hector Matos
+ Website: https://krakendev.io
+ Twitter Handle: https://twitter.com/allonsykraken)
+*/
+
+/*
+SOLARIZED HEX
+--------- -------
+base03    #002b36
+base02    #073642
+base01    #586e75
+base00    #657b83
+base0     #839496
+base1     #93a1a1
+base2     #eee8d5
+base3     #fdf6e3
+yellow    #b58900
+orange    #cb4b16
+red       #dc322f
+magenta   #d33682
+violet    #6c71c4
+blue      #268bd2
+cyan      #2aa198
+green     #859900
+*/
+
+.prism-solarizedlight code[class*="language-"],
+.prism-solarizedlight pre[class*="language-"] {
+	color: #657b83; /* base00 */
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+.prism-solarizedlight pre[class*="language-"]::-moz-selection, .prism-solarizedlight pre[class*="language-"] ::-moz-selection, .prism-solarizedlight code[class*="language-"]::-moz-selection, .prism-solarizedlight code[class*="language-"] ::-moz-selection {
+	background: #073642; /* base02 */
+}
+
+.prism-solarizedlight pre[class*="language-"]::selection, .prism-solarizedlight pre[class*="language-"] ::selection, .prism-solarizedlight code[class*="language-"]::selection, .prism-solarizedlight code[class*="language-"] ::selection {
+	background: #073642; /* base02 */
+}
+
+/* Code blocks */
+.prism-solarizedlight pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+.prism-solarizedlight :not(pre) > code[class*="language-"],
+.prism-solarizedlight pre[class*="language-"] {
+	background-color: #fdf6e3; /* base3 */
+}
+
+/* Inline code */
+.prism-solarizedlight :not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+}
+
+.prism-solarizedlight .token.comment,
+.prism-solarizedlight .token.prolog,
+.prism-solarizedlight .token.doctype,
+.prism-solarizedlight .token.cdata {
+	color: #93a1a1; /* base1 */
+}
+
+.prism-solarizedlight .token.punctuation {
+	color: #586e75; /* base01 */
+}
+
+.prism-solarizedlight .token.namespace {
+	opacity: .7;
+}
+
+.prism-solarizedlight .token.property,
+.prism-solarizedlight .token.tag,
+.prism-solarizedlight .token.boolean,
+.prism-solarizedlight .token.number,
+.prism-solarizedlight .token.constant,
+.prism-solarizedlight .token.symbol,
+.prism-solarizedlight .token.deleted {
+	color: #268bd2; /* blue */
+}
+
+.prism-solarizedlight .token.selector,
+.prism-solarizedlight .token.attr-name,
+.prism-solarizedlight .token.string,
+.prism-solarizedlight .token.char,
+.prism-solarizedlight .token.builtin,
+.prism-solarizedlight .token.url,
+.prism-solarizedlight .token.inserted {
+	color: #2aa198; /* cyan */
+}
+
+.prism-solarizedlight .token.entity {
+	color: #657b83; /* base00 */
+	background: #eee8d5; /* base2 */
+}
+
+.prism-solarizedlight .token.atrule,
+.prism-solarizedlight .token.attr-value,
+.prism-solarizedlight .token.keyword {
+	color: #859900; /* green */
+}
+
+.prism-solarizedlight .token.function,
+.prism-solarizedlight .token.class-name {
+	color: #b58900; /* yellow */
+}
+
+.prism-solarizedlight .token.regex,
+.prism-solarizedlight .token.important,
+.prism-solarizedlight .token.variable {
+	color: #cb4b16; /* orange */
+}
+
+.prism-solarizedlight .token.important,
+.prism-solarizedlight .token.bold {
+	font-weight: bold;
+}
+.prism-solarizedlight .token.italic {
+	font-style: italic;
+}
+
+.prism-solarizedlight .token.entity {
+	cursor: help;
+}

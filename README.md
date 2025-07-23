@@ -1,8 +1,8 @@
-# 📸 CodeSnapper
+# 📸 codeshoot
 
 > Turn code into beautiful, shareable images — directly in the browser, no framework needed.
 
-**CodeSnapper** is a lightweight, zero-dependency JavaScript package that allows users to paste source code and instantly generate a **screenshot-quality image** with syntax highlighting. It's perfect for:
+**codeshoot** is a lightweight JavaScript package that allows users to paste source code and instantly generate a **screenshot-quality image** with syntax highlighting. It's perfect for:
 - Sharing code on social media
 - Creating blog visuals
 - Embedding into portfolio sites
@@ -11,7 +11,7 @@
 
 ## 🚀 Features
 
-- ✅ **Vanilla JavaScript** — Built in Javascript
+- ✅ ** JavaScript** — Built in Javascript
 - ✨ **Syntax highlighting** via [Prism.js](https://prismjs.com/)
 - 🎨 Built-in dark theme (custom themes supported)
 - 📝 Editable code input with real-time preview
@@ -25,4 +25,4 @@
 Install from NPM:
 
 ```bash
-npm install codesnapper
+npm install koome/codeshoot
