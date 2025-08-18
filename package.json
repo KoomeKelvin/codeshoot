@@ -1,6 +1,6 @@
 {
-  "name": "@koome/codeshoot",
-  "version": "1.0.0",
+  "name": "codeshoot",
+  "version": "1.0.2",
   "description": "Generate code screenshots with syntax highlighting",
   "main": "dist/codeshoot.js",
   "module": "dist/codeshoot.js",
@@ -17,9 +17,35 @@
     "preview": "vite preview"
   },
    "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
-  "keywords": [],
+  "keywords": [
+  "code",
+  "screenshot",
+  "snippet",
+  "share",
+  "highlight",
+  "syntax-highlighting",
+  "prismjs",
+  "code-to-image",
+  "developer-tools",
+  "blog",
+  "social",
+  "portfolio",
+  "embed",
+  "presentation",
+  "javascript",
+  "codeshoot",
+  "frontend",
+  "showcase",
+  "devtools",
+  "teaching"],
+
+  "funding": {
+  "type": "buymeacoffee",
+  "url": "https://buymeacoffee.com/koome"
+  },
+  
   "author": "Koome Kelvin",
   "license": "MIT",
   "dependencies": {
