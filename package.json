@@ -1,6 +1,6 @@
 {
   "name": "codeshoot",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Generate code screenshots with syntax highlighting",
   "main": "dist/codeshoot.js",
   "module": "dist/codeshoot.js",

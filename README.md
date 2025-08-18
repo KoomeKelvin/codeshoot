@@ -26,16 +26,20 @@ Install from NPM:
 
 ```bash
 npm install codeshoot
+```
 
 ## 🛠️ Usage  
 
-Import into your project:  
+### Import into your project:  
 
 ```js
 import { createCodeShot } from 'codeshoot';
 import 'codeshoot/dist/style.css';  // include styles
+```
 
-initialize inside a container:
+
+### initialize inside a container and:
+#### replace object property values passed in createCodeShoot with yours
 
 ```js
 createCodeShot({
@@ -50,6 +54,8 @@ createCodeShot({
   enablePaste: true,
   enableCopy: true
 });
+```
+
 
 ### 🎨 Supported Languages
 
