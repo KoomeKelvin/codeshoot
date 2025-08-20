@@ -122,14 +122,63 @@ export function createCodeShot({
   if (enableDownload) {
     const btn = container.querySelector('#downloadBtn');
     btn?.addEventListener('click', () => {
-      html2canvas(wrapper, { scale: 2 }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'codeshoot.png';
-        link.href = canvas.toDataURL();
-        link.click();
+      const wrapper = container.querySelector('#screenshotArea');
+      const pre = container.querySelector('.highlighted-code');
+      if (!wrapper || !pre) return;
+
+      // Clone wrapper so user doesn’t see flicker
+      const clone = wrapper.cloneNode(true);
+
+      // Copy computed styles into clone to preserve themes + wrapper
+      const allElements = wrapper.querySelectorAll('*');
+      const allClones = clone.querySelectorAll('*');
+      allElements.forEach((el, i) => {
+        const style = window.getComputedStyle(el);
+        const target = allClones[i];
+        for (let prop of style) {
+          target.style[prop] = style.getPropertyValue(prop);
+        }
+      });
+
+      // Position clone off-screen
+      clone.style.position = "absolute";
+      clone.style.left = "-9999px";
+      clone.style.top = "0";
+      clone.style.zIndex = "-1";
+      clone.style.width = "auto";
+      clone.style.height = "auto";
+      clone.style.overflow = "visible";
+
+      const preClone = clone.querySelector('.highlighted-code');
+      preClone.style.width = "auto";
+      preClone.style.height = "auto";
+      preClone.style.overflow = "visible";
+      preClone.style.maxHeight = "none";
+      preClone.style.whiteSpace = "pre-wrap"; // wrap long lines so height expands
+      preClone.style.wordBreak = "break-word"; // prevent overflow
+
+      // Hide unwanted controls in screenshot
+      const hiddenControls = clone.querySelectorAll('#downloadBtn, #copyBtn');
+      hiddenControls.forEach(btn => btn.style.display = 'none');
+
+      document.body.appendChild(clone);
+
+      // Capture screenshot
+      requestAnimationFrame(() => {
+        html2canvas(clone, { scale: 2, backgroundColor: null }).then(canvas => {
+          document.body.removeChild(clone); // cleanup
+
+          const link = document.createElement('a');
+          link.download = 'codeshoot.png';
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        });
       });
     });
   }
+
+
+
 
   if (enableCopy) {
     const copyBtn = container.querySelector('#copyBtn');

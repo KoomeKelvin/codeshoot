@@ -1,13 +1,6 @@
 /* Base styles */
-body {
-  font-family: 'Fira Code', monospace;
-  background: #1e1e1e;
-  margin: 0;
-  padding: 2rem;
-  color: #fff;
-}
-
 .codephoto {
+  font-family: 'Fira Code', monospace;
   background: #282c34;
   border-radius: 12px;
   padding: 1rem;
