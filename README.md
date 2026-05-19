@@ -101,6 +101,7 @@ By default, codeshoot uses **Fira Code** (loaded via Google Fonts) for ligature 
 createCodeShot({
   fontFamily: "'JetBrains Mono', monospace",
   fontSize: '13px',
+  ambientBackground: true,
   ...
 });
 ```

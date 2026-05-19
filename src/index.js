@@ -23,6 +23,51 @@ export const themeMap = {
   coy: 'prism-coy'
 };
 
+// ─── Ambient Background Helpers ──────────────────────────────
+
+function getDominantColors(colorList, count = 3) {
+  const frequency = {};
+  colorList.forEach(color => {
+    frequency[color] = (frequency[color] || 0) + 1;
+  });
+  return Object.entries(frequency)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, count)
+    .map(([color]) => color);
+}
+
+function extractColorsFromHighlight(highlightedCodeEl) {
+  const spans = highlightedCodeEl.querySelectorAll('span[class*="token"]');
+  const colors = [];
+  spans.forEach(span => {
+    const color = window.getComputedStyle(span).color;
+    // Filter out black, white, and transparent — they make bad gradients
+    if (
+      color &&
+      color !== 'rgba(0, 0, 0, 0)' &&
+      color !== 'rgb(0, 0, 0)' &&
+      color !== 'rgb(255, 255, 255)'
+    ) {
+      colors.push(color);
+    }
+  });
+  return getDominantColors(colors, 3);
+}
+
+function applyAmbientBackground(codephotoEl, colors) {
+  const [c1, c2, c3] = colors;
+  if (!c1) return; // no colors extracted, leave default background
+
+  codephotoEl.style.background = `
+    radial-gradient(ellipse at top left, ${c1}40 0%, transparent 60%),
+    radial-gradient(ellipse at bottom right, ${c2 || c1}40 0%, transparent 60%),
+    radial-gradient(ellipse at center, ${c3 || c1}25 0%, transparent 70%),
+    #0d0d0d
+  `;
+}
+
+// ─────────────────────────────────────────────────────────────
+
 export function createCodeShot({
   code,
   language = 'javascript',
@@ -35,17 +80,16 @@ export function createCodeShot({
   enablePaste = true,
   enableCopy = true,
   fontFamily = "'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'Courier New', monospace",
-  fontSize = '14px'
+  fontSize = '14px',
+  ambientBackground = false  // 👈 new option
 }) {
   if (!container) throw new Error("You must provide a container element.");
 
-  // Apply font variables
   container.style.setProperty('--font-mono', fontFamily);
   container.style.setProperty('--font-size', fontSize);
 
   const themeClass = themeMap[theme] || themeMap.default;
 
-  // Load language if not already available
   if (!Prism.languages[language]) {
     try {
       loadLanguages([language]);
@@ -58,7 +102,6 @@ export function createCodeShot({
   const invisibleChar = '\u200B';
   const isCodeEmpty = !code?.trim();
 
-  // Sanitize title to prevent XSS
   const safeTitle = title.replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
   container.innerHTML = `
@@ -78,8 +121,8 @@ export function createCodeShot({
   const textarea = container.querySelector('#codeInput');
   const highlightedCode = container.querySelector('#highlightedCode');
   const wrapper = container.querySelector('#screenshotArea');
+  const codephotoEl = container.querySelector('.codephoto'); // 👈 needed for ambient bg
 
-  // Double-click to toggle between editing and selecting
   wrapper.classList.add('editing');
   wrapper.addEventListener('dblclick', () => {
     wrapper.classList.toggle('editing');
@@ -96,6 +139,14 @@ export function createCodeShot({
     highlightedCode.textContent = content || placeholderComment;
     highlightedCode.className = `language-${language}`;
     Prism.highlightElement(highlightedCode);
+
+    // Apply ambient background after Prism colorizes the tokens
+    if (ambientBackground) {
+      requestAnimationFrame(() => {
+        const colors = extractColorsFromHighlight(highlightedCode);
+        applyAmbientBackground(codephotoEl, colors);
+      });
+    }
 
     requestAnimationFrame(() => {
       textarea.style.width = wrapper.clientWidth + 'px';
@@ -125,7 +176,6 @@ export function createCodeShot({
     textarea.addEventListener('input', updateHighlight);
   }
 
-  // Wait for fonts to load before first render
   document.fonts.ready.then(() => {
     updateHighlight();
   });
@@ -139,7 +189,6 @@ export function createCodeShot({
 
       const clone = wrapper.cloneNode(true);
 
-      // Copy computed styles to preserve themes in screenshot
       const allElements = wrapper.querySelectorAll('*');
       const allClones = clone.querySelectorAll('*');
       allElements.forEach((el, i) => {
@@ -150,7 +199,11 @@ export function createCodeShot({
         }
       });
 
-      // Position clone off-screen
+      // Carry ambient background into the screenshot
+      if (ambientBackground) {
+        clone.style.background = codephotoEl.style.background;
+      }
+
       clone.style.position = "absolute";
       clone.style.left = "-9999px";
       clone.style.top = "0";
@@ -167,13 +220,11 @@ export function createCodeShot({
       preClone.style.whiteSpace = "pre-wrap";
       preClone.style.wordBreak = "break-word";
 
-      // Hide controls from screenshot
       clone.querySelectorAll('#downloadBtn, #copyBtn')
         .forEach(el => el.style.display = 'none');
 
       document.body.appendChild(clone);
 
-      // Ensure fonts are ready before capturing
       await document.fonts.ready;
 
       requestAnimationFrame(() => {

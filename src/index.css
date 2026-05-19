@@ -16,6 +16,7 @@
   max-width: 700px;
   margin: 0 auto;
   position: relative;
+  transition: background 0.6s ease;
 }
 
 /* ─── Global font smoothing for all codephoto children ──────── */
