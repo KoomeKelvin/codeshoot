@@ -1,7 +1,7 @@
 {
   "name": "codeshoot",
-  "version": "1.0.6",
-  "description": "Allowed changing of font size and line height in the code snippet, making it more customizable and visually appealing.",
+  "version": "1.0.7",
+  "description": "Ambient background color added to code screenshots, making them more visually appealing and easier to read.",
   "main": "dist/codeshoot.js",
   "module": "dist/codeshoot.js",
   "type": "module",
