@@ -1,7 +1,7 @@
 {
   "name": "codeshoot",
-  "version": "1.0.5",
-  "description": "Generate code screenshots with syntax highlighting",
+  "version": "1.0.6",
+  "description": "Allowed changing of font size and line height in the code snippet, making it more customizable and visually appealing.",
   "main": "dist/codeshoot.js",
   "module": "dist/codeshoot.js",
   "type": "module",

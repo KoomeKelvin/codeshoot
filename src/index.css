@@ -1,14 +1,28 @@
-/* Base styles */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap');
+
+/* ─── Font Variable ─────────────────────────────────────────── */
+:root {
+  --font-mono: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'Courier New', monospace;
+  --font-size: 14px;
+}
+
+/* ─── Base styles ───────────────────────────────────────────── */
 .codephoto {
-  font-family: 'Fira Code', monospace;
+  font-family: var(--font-mono);
   background: #282c34;
   border-radius: 12px;
   padding: 1rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   max-width: 700px;
   margin: 0 auto;
-  font-family: 'Fira Code', monospace;
   position: relative;
+}
+
+/* ─── Global font smoothing for all codephoto children ──────── */
+.codephoto * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .editor-wrapper {
@@ -18,7 +32,7 @@
   overflow: hidden;
 }
 
-/* Title input */
+/* ─── Title input ───────────────────────────────────────────── */
 #titleInput {
   z-index: 2;
   position: relative;
@@ -32,9 +46,10 @@
   width: 100%;
   text-align: center;
   pointer-events: auto;
+  font-family: var(--font-mono);
 }
 
-/* Invisible editable code layer */
+/* ─── Invisible editable code layer ────────────────────────── */
 #codeInput {
   position: absolute;
   top: 0;
@@ -44,8 +59,8 @@
   resize: none;
   opacity: 0;
   z-index: 1;
-  font-family: inherit;
-  font-size: 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--font-size);
   line-height: 1.6;
   margin: 0;
   padding: 1rem;
@@ -54,20 +69,20 @@
   background: transparent;
 }
 
-/* Highlighted code (Prism output) */
+/* ─── Highlighted code (Prism output) ──────────────────────── */
 .highlighted-code {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--font-size);
   line-height: 1.6;
   padding: 1rem;
   overflow: auto;
   white-space: pre-wrap;
   background: none;
-  z-index: 1; /* Below the textarea */
-  position: relative; 
+  z-index: 1;
+  position: relative;
 }
 
-/* In edit mode: textarea is on top, code block is non-interactive */
+/* ─── Edit mode ─────────────────────────────────────────────── */
 .editor-wrapper.editing #codeInput {
   pointer-events: auto;
   user-select: text;
@@ -79,7 +94,7 @@
   pointer-events: none;
 }
 
-/* In view/select mode: textarea is non-interactive */
+/* ─── Select/view mode ──────────────────────────────────────── */
 .editor-wrapper.selecting #codeInput {
   pointer-events: none;
   user-select: none;
@@ -91,9 +106,9 @@
   cursor: text;
 }
 
-
-/* Download button */
-#downloadBtn, #copyBtn {
+/* ─── Buttons ───────────────────────────────────────────────── */
+#downloadBtn,
+#copyBtn {
   margin-top: 1rem;
   background: #ffdc00;
   color: #000;
@@ -105,20 +120,21 @@
   transition: background 0.2s ease-in-out;
 }
 
-#downloadBtn:hover #copyBtn:hover{
+#downloadBtn:hover,
+#copyBtn:hover {
   background: #ffc700;
 }
 
-code, pre {
-  font-family: 'Fira Code', 'Courier New', monospace !important;
-  font-size: 14px;
+/* ─── Code & Pre font settings ──────────────────────────────── */
+code,
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--font-size);
+  font-variant-ligatures: common-ligatures;
+  font-feature-settings: "liga" 1, "calt" 1;
 }
 
 pre[class*="language-"] code {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
   text-shadow: none !important;
   filter: none !important;
 }
-

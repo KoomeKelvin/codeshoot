@@ -3,7 +3,6 @@ import html2canvas from 'html2canvas';
 import Prism from 'prismjs';
 import loadLanguages from 'prismjs/components/index.js';
 
-// Static scoped imports (you MUST scope them manually in the CSS files as explained)
 import './themes/scoped/prism.css';
 import './themes/scoped/prism-tomorrow.css';
 import './themes/scoped/prism-dark.css';
@@ -34,12 +33,19 @@ export function createCodeShot({
   enableFocus = true,
   enableInput = true,
   enablePaste = true,
-  enableCopy = true
+  enableCopy = true,
+  fontFamily = "'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'Courier New', monospace",
+  fontSize = '14px'
 }) {
   if (!container) throw new Error("You must provide a container element.");
 
+  // Apply font variables
+  container.style.setProperty('--font-mono', fontFamily);
+  container.style.setProperty('--font-size', fontSize);
+
   const themeClass = themeMap[theme] || themeMap.default;
 
+  // Load language if not already available
   if (!Prism.languages[language]) {
     try {
       loadLanguages([language]);
@@ -49,13 +55,16 @@ export function createCodeShot({
   }
 
   const placeholderComment = '// Paste your code here to enjoy CodeShoot';
-  const invisibleChar = '\u200B'; // zero-width space
+  const invisibleChar = '\u200B';
   const isCodeEmpty = !code?.trim();
+
+  // Sanitize title to prevent XSS
+  const safeTitle = title.replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
   container.innerHTML = `
     <div class="codephoto ${themeClass}">
       <div class="editor-wrapper" id="screenshotArea">
-        <input type="text" id="titleInput" value="${title}" />
+        <input type="text" id="titleInput" value="${safeTitle}" />
         <pre class="highlighted-code"><code id="highlightedCode" class="language-${language}"></code></pre>
         <textarea id="codeInput" spellcheck="false">${isCodeEmpty ? placeholderComment : code}</textarea>
       </div>
@@ -69,7 +78,8 @@ export function createCodeShot({
   const textarea = container.querySelector('#codeInput');
   const highlightedCode = container.querySelector('#highlightedCode');
   const wrapper = container.querySelector('#screenshotArea');
-    // Enable double-click toggle between editing and selecting
+
+  // Double-click to toggle between editing and selecting
   wrapper.classList.add('editing');
   wrapper.addEventListener('dblclick', () => {
     wrapper.classList.toggle('editing');
@@ -98,8 +108,6 @@ export function createCodeShot({
       if (textarea.value.trim() === placeholderComment) {
         textarea.value = invisibleChar;
         updateHighlight();
-
-        // Place cursor after invisible char
         setTimeout(() => {
           textarea.setSelectionRange(1, 1);
         }, 0);
@@ -117,19 +125,21 @@ export function createCodeShot({
     textarea.addEventListener('input', updateHighlight);
   }
 
-  setTimeout(updateHighlight, 100);
+  // Wait for fonts to load before first render
+  document.fonts.ready.then(() => {
+    updateHighlight();
+  });
 
   if (enableDownload) {
     const btn = container.querySelector('#downloadBtn');
-    btn?.addEventListener('click', () => {
+    btn?.addEventListener('click', async () => {
       const wrapper = container.querySelector('#screenshotArea');
       const pre = container.querySelector('.highlighted-code');
       if (!wrapper || !pre) return;
 
-      // Clone wrapper so user doesn’t see flicker
       const clone = wrapper.cloneNode(true);
 
-      // Copy computed styles into clone to preserve themes + wrapper
+      // Copy computed styles to preserve themes in screenshot
       const allElements = wrapper.querySelectorAll('*');
       const allClones = clone.querySelectorAll('*');
       allElements.forEach((el, i) => {
@@ -154,19 +164,26 @@ export function createCodeShot({
       preClone.style.height = "auto";
       preClone.style.overflow = "visible";
       preClone.style.maxHeight = "none";
-      preClone.style.whiteSpace = "pre-wrap"; // wrap long lines so height expands
-      preClone.style.wordBreak = "break-word"; // prevent overflow
+      preClone.style.whiteSpace = "pre-wrap";
+      preClone.style.wordBreak = "break-word";
 
-      // Hide unwanted controls in screenshot
-      const hiddenControls = clone.querySelectorAll('#downloadBtn, #copyBtn');
-      hiddenControls.forEach(btn => btn.style.display = 'none');
+      // Hide controls from screenshot
+      clone.querySelectorAll('#downloadBtn, #copyBtn')
+        .forEach(el => el.style.display = 'none');
 
       document.body.appendChild(clone);
 
-      // Capture screenshot
+      // Ensure fonts are ready before capturing
+      await document.fonts.ready;
+
       requestAnimationFrame(() => {
-        html2canvas(clone, { scale: 2, backgroundColor: null }).then(canvas => {
-          document.body.removeChild(clone); // cleanup
+        html2canvas(clone, {
+          scale: 2,
+          backgroundColor: null,
+          useCORS: true,
+          allowTaint: false
+        }).then(canvas => {
+          document.body.removeChild(clone);
 
           const link = document.createElement('a');
           link.download = 'codeshoot.png';
@@ -176,9 +193,6 @@ export function createCodeShot({
       });
     });
   }
-
-
-
 
   if (enableCopy) {
     const copyBtn = container.querySelector('#copyBtn');
@@ -194,6 +208,4 @@ export function createCodeShot({
         .catch(err => console.error("Copy failed", err));
     });
   }
-
-
 }
